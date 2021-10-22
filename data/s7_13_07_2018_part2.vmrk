@@ -1,0 +1,67 @@
+Brain Vision Data Exchange Marker File, Version 1.0
+
+[Common Infos]
+Codepage=UTF-8
+DataFile=s7_13_07_2018_part2.eeg
+
+[Marker Infos]
+; Each entry: Mk<Marker number>=<Type>,<Description>,<Position in data points>,
+; <Size in data points>, <Channel number (0 = marker is related to all channels)>
+; Fields are delimited by commas, some fields might be omitted (empty).
+; Commas in type or description text are coded as "\1".
+Mk1=New Segment,,1,1,0,20180713103628980221
+Mk2=Stimulus,S  6,13726,1,0
+Mk3=Stimulus,S  6,14558,1,0
+Mk4=Stimulus,S  6,16093,1,0
+Mk5=Stimulus,S126,16134,1,0
+Mk6=Stimulus,S125,34043,1,0
+Mk7=Stimulus,S128,51932,1,0
+Mk8=DC Correction,,66581,1,0
+Mk9=Stimulus,S127,69830,1,0
+Mk10=Stimulus,S  6,174734,1,0
+Mk11=Stimulus,S  6,175518,1,0
+Mk12=Stimulus,S  6,176118,1,0
+Mk13=Stimulus,S127,176159,1,0
+Mk14=DC Correction,,176581,1,0
+Mk15=Stimulus,S126,194048,1,0
+Mk16=Stimulus,S125,211947,1,0
+Mk17=Stimulus,S129,229855,1,0
+Mk18=Stimulus,S128,247744,1,0
+Mk19=Stimulus,S  3,268561,1,0
+Mk20=Stimulus,S 46,278622,1,0
+Mk21=Stimulus,S 47,296510,1,0
+Mk22=Stimulus,S 48,314409,1,0
+Mk23=Stimulus,S 45,332298,1,0
+Mk24=Stimulus,S 49,350197,1,0
+Mk25=Stimulus,S  5,369533,1,0
+Mk26=Stimulus,S 64,379585,1,0
+Mk27=Stimulus,S 63,397473,1,0
+Mk28=Stimulus,S 62,415372,1,0
+Mk29=Stimulus,S 60,433261,1,0
+Mk30=Stimulus,S 61,451159,1,0
+Mk31=DC Correction,,470121,1,0
+Mk32=Stimulus,S  5,470984,1,0
+Mk33=Stimulus,S 40,481047,1,0
+Mk34=Stimulus,S 42,498936,1,0
+Mk35=Stimulus,S 43,516835,1,0
+Mk36=Stimulus,S 41,534723,1,0
+Mk37=Stimulus,S 44,552622,1,0
+Mk38=Stimulus,S  4,573107,1,0
+Mk39=Stimulus,S 66,583160,1,0
+Mk40=Stimulus,S 65,601059,1,0
+Mk41=Stimulus,S 68,618967,1,0
+Mk42=Stimulus,S 69,636876,1,0
+Mk43=Stimulus,S 67,654765,1,0
+Mk44=Stimulus,S  4,674463,1,0
+Mk45=Stimulus,S 34,684523,1,0
+Mk46=Stimulus,S 30,702421,1,0
+Mk47=Stimulus,S  6,806617,1,0
+Mk48=Stimulus,S  6,807257,1,0
+Mk49=Stimulus,S  6,807977,1,0
+Mk50=Stimulus,S102,808013,1,0
+Mk51=Stimulus,S100,825901,1,0
+Mk52=Stimulus,S104,843800,1,0
+Mk53=DC Correction,,858741,1,0
+Mk54=Stimulus,S101,861689,1,0
+Mk55=DC Correction,,865021,1,0
+Mk56=Stimulus,S103,879588,1,0
