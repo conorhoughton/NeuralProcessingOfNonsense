@@ -36,6 +36,17 @@ def checkStimuli(filepath):
 	if verify is True:
 		print("Found all stimuli in file", filepath.lstrip("../data/"))
 
+def findParticipantIds(filenames):
+	# Note: This is assuming that the .vmrk files are of the format [participantId]_[day]_[month]_[year].vmrk
+	# eg filenames input: ['S7_13_07_2018.vmrk', 'S2_03_07_2018.vmrk']
+
+	# find the ids
+	participantIds = [filename.split('_')[0] for filename in filenames]
+	
+	# remove duplicates
+	participantIds = list(set(participantIds))
+	return participantIds
+
 def findSplittedFiles(participantID, filepaths):
 	# Note: This is assuming that the splitted files still contain the participant id somewhere in the filename
 	# eg: S7_13_07_2018.vmrk, s7_13_07_2018_part2.vmrk, s7_13_07_2018_part3.vmrk
@@ -55,6 +66,8 @@ def concatonateSplittedFiles(participantID, filepaths):
 				for line in infile:
 					outfile.write(line)
 
+	return outputFilename
+
 def main():
 	# searching for .vmrk files
 	filepaths = glob.glob('../data/*.vmrk')
@@ -69,6 +82,7 @@ def main():
 	filenames.sort()
 	print("\n".join(filenames))
 
+	participantIds = findParticipantIds(filenames)
 	# procedure that combines two files if the data is split into multiple files
 
 	# procedure that checks a file
