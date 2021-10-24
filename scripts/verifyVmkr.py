@@ -26,47 +26,58 @@ def checkStimuli(filepath):
 	# check if all the stimuli are there, exactly once
 	stimulusCheck = minStimulusValue
 	verify = True
+	missing = []
+	repeated = []
+
 	for stimulus in stimuli:
 		if stimulus == stimulusCheck:
 			stimulusCheck += 1
 		else:
+			if stimulus == stimulusCheck-1 and stimulus not in repeated:
+				repeated.append(stimulus)
+			if stimulus > stimulusCheck:
+				for i in range(stimulusCheck, stimulus):
+					missing.append(i)
+				stimulusCheck = stimulus+1
 			verify = False
-			break
 
 	if verify is True:
-		print("Found all stimuli in file", filepath.lstrip("../data/"))
+		print("Found all stimuli in file " + filepath.lstrip("../data/"))
+	else:
+		print("* Did not find all stimuli in file " + filepath.lstrip("../data/"))
+		print("Missing: " + str(missing))
+		print("Repeated: " + str(repeated))
 
-def findParticipantIds(filenames):
+def findparticipantIds(filenames):
 	# Note: This is assuming that the .vmrk files are of the format [participantId]_[day]_[month]_[year].vmrk
 	# eg filenames input: ['S7_13_07_2018.vmrk', 'S2_03_07_2018.vmrk']
+	# output: ['S7_', 'S2_']
+	# we keep the underscore in order to differentiate (for eg) S1 and S11
 
 	# find the ids
-	participantIds = [filename.split('_')[0] for filename in filenames]
+	participantIds = [filename.split('_')[0] + '_' for filename in filenames]
 	
 	# remove duplicates
-	participantIds = list(set(participantIds))
-	return participantIds
+	participantUniqIds = []
+	for participantId in participantIds:
+		if participantId.lower() not in participantUniqIds and participantId.upper() not in participantUniqIds:
+			participantUniqIds.append(participantId)
 
-def findSplittedFiles(participantID, filepaths):
+	return participantUniqIds
+
+def findSplittedFiles(participantId, filepaths):
 	# Note: This is assuming that the splitted files still contain the participant id somewhere in the filename
 	# eg: S7_13_07_2018.vmrk, s7_13_07_2018_part2.vmrk, s7_13_07_2018_part3.vmrk
 	# takes care if the letter case is not consistent
 
-	participantID = participantID.lower()
-	filepaths = [filepath for filepath in filepaths if participantID in filepath.lower()]
-	
-	return filepaths
+	return [filepath for filepath in filepaths if participantId.lower() in filepath.lower()]
 
-def concatonateSplittedFiles(participantID, filepaths):
-	outputFilename = "../data/" + participantID + '_concatonated.vmrk'
-	
+def concatonateSplittedFiles(participantId, filepaths, outputFilename):
 	with open(outputFilename, 'w+') as outfile:
 		for filepath in filepaths:
 			with open(filepath, 'r') as infile:
 				for line in infile:
 					outfile.write(line)
-
-	return outputFilename
 
 def main():
 	# searching for .vmrk files
@@ -80,12 +91,28 @@ def main():
 	print("Found the following .vmrk files in ../data/\n")
 	filenames = [file.lstrip("../data/") for file in filepaths]
 	filenames.sort()
-	print("\n".join(filenames))
+	print("\n".join(filenames) + "\n")
 
-	participantIds = findParticipantIds(filenames)
-	# procedure that combines two files if the data is split into multiple files
+	participantIds = findparticipantIds(filenames)
+	
+	# procedure that combines files if the participant data is split into multiple files
+	for participantId in participantIds:
+		paths = findSplittedFiles(participantId, filepaths)
+		if len(paths) > 1: # we only concatone if there are more than one file for the same participant
+			print("Participant " + participantId[:-1] + "'s data is split in multiple .vmrk files\n")
+			concatonatedFilePath = "../data/" + participantId + 'concatonated.vmrk'
+
+			if concatonatedFilePath not in filepaths: # concatonated file is not there; we add it and remove the others
+				concatonateSplittedFiles(participantId, paths)
+
+			filepaths = [filepath for filepath in filepaths if filepath not in paths] # remove old filepaths from the list
+			filepaths.append(concatonatedFilePath) # add the new filepath to the concatonated file
+	print("\n")
 
 	# procedure that checks a file
+	filepaths.sort() # easier reading
+	for filepath in filepaths:
+		checkStimuli(filepath)
 
 if __name__ == "__main__":
 	main()
