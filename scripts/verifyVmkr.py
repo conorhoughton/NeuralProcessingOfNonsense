@@ -2,7 +2,7 @@ import glob
 import re
 
 def checkStimuli(filepath):
-	# note: this is asumming that the stimuli are numbered minStimulusValue, minStimulusValue+1 ... maxStimulusValue
+	# Note: This is asumming that the stimuli are numbered minStimulusValue, minStimulusValue+1 ... maxStimulusValue
 	minStimulusValue = 10
 	maxStimulusValue = 129
 
@@ -36,19 +36,29 @@ def checkStimuli(filepath):
 	if verify is True:
 		print("Found all stimuli in file", filepath.lstrip("../data/"))
 
+def findSplittedFiles(participantID, filepaths):
+	# Note: This is assuming that the splitted files still contain the participant id somewhere in the filename
+	# eg: S7_13_07_2018.vmrk, s7_13_07_2018_part2.vmrk, s7_13_07_2018_part3.vmrk
+	# takes care if the letter case is not consistent
+
+	participantID = participantID.lower()
+	filepaths = [filename.lower() for filename in filenames if participantID in filename.lower()]
+	
+	return filepaths
+
 def main():
 	# searching for .vmrk files
-	filenames = glob.glob('../data/*.vmrk')
+	filepaths = glob.glob('../data/*.vmrk')
 
-	if len(filenames) == 0:
+	if len(filepaths) == 0:
 		print("No .vmrk files were found in ../data/")
 		return
 
 	# printing found .vmrk files
 	print("Found the following .vmrk files in ../data/\n")
-	files = [file.lstrip("../data/") for file in filenames]
-	files.sort()
-	print("\n".join(files))
+	filenames = [file.lstrip("../data/") for file in filepaths]
+	filenames.sort()
+	print("\n".join(filenames))
 
 	# procedure that combines two files if the data is split into multiple files
 	# procedure that checks a file
