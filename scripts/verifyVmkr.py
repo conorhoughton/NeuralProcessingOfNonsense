@@ -11,7 +11,7 @@ def checkStimuli(filepath):
 		if re.search("Stimulus", line):
 			stimuli.append(line)
 
-	# split all lines with the commas as delimiter
+	# split all lines with the comma as delimiter
 	stimuli = [line.split(',') for line in stimuli]
 	
 	# extract stimulus string
@@ -42,9 +42,18 @@ def findSplittedFiles(participantID, filepaths):
 	# takes care if the letter case is not consistent
 
 	participantID = participantID.lower()
-	filepaths = [filename.lower() for filename in filenames if participantID in filename.lower()]
+	filepaths = [filepath for filepath in filepaths if participantID in filepath.lower()]
 	
 	return filepaths
+
+def concatonateSplittedFiles(participantID, filepaths):
+	outputFilename = "../data/" + participantID + '_concatonated.vmrk'
+	
+	with open(outputFilename, 'w+') as outfile:
+		for filepath in filepaths:
+			with open(filepath, 'r') as infile:
+				for line in infile:
+					outfile.write(line)
 
 def main():
 	# searching for .vmrk files
@@ -61,6 +70,7 @@ def main():
 	print("\n".join(filenames))
 
 	# procedure that combines two files if the data is split into multiple files
+
 	# procedure that checks a file
 
 if __name__ == "__main__":
