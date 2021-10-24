@@ -72,7 +72,7 @@ def findSplittedFiles(participantId, filepaths):
 
 	return [filepath for filepath in filepaths if participantId.lower() in filepath.lower()]
 
-def concatonateSplittedFiles(participantId, filepaths, outputFilename):
+def concatenateSplittedFiles(participantId, filepaths, outputFilename):
 	with open(outputFilename, 'w+') as outfile:
 		for filepath in filepaths:
 			with open(filepath, 'r') as infile:
@@ -100,13 +100,13 @@ def main():
 		paths = findSplittedFiles(participantId, filepaths)
 		if len(paths) > 1: # we only concatone if there are more than one file for the same participant
 			print("Participant " + participantId[:-1] + "'s data is split in multiple .vmrk files\n")
-			concatonatedFilePath = "../data/" + participantId + 'concatonated.vmrk'
+			concatenatedFilePath = "../data/" + participantId + 'concatenated.vmrk'
 
-			if concatonatedFilePath not in filepaths: # concatonated file is not there; we add it and remove the others
-				concatonateSplittedFiles(participantId, paths)
+			if concatenatedFilePath not in filepaths: # concatenated file is not there; we add it and remove the others
+				concatenateSplittedFiles(participantId, paths)
 
 			filepaths = [filepath for filepath in filepaths if filepath not in paths] # remove old filepaths from the list
-			filepaths.append(concatonatedFilePath) # add the new filepath to the concatonated file
+			filepaths.append(concatenatedFilePath) # add the new filepath to the concatenated file
 	print("\n")
 
 	# procedure that checks a file
