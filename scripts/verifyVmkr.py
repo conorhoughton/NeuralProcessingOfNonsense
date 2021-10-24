@@ -20,6 +20,8 @@ def checkStimuli(filepath):
 	
 	# extract stimulus integer value, remove those not in the specified range and sort
 	stimuli = [int(stimulus) for stimulus in stimuli]
+	beyond = [stimulus for stimulus in stimuli if stimulus > maxStimulusValue]
+	beyond = list(set(beyond))
 	stimuli = [stimulus for stimulus in stimuli if minStimulusValue <= stimulus and stimulus <= maxStimulusValue]
 	stimuli.sort()
 
@@ -42,11 +44,12 @@ def checkStimuli(filepath):
 			verify = False
 
 	if verify is True:
-		print("Found all stimuli in file " + filepath.lstrip("../data/"))
+		print("** Found all stimuli exactly once in file " + filepath.lstrip("../data/"))
 	else:
-		print("* Did not find all stimuli in file " + filepath.lstrip("../data/"))
+		print("** Failed to find all stimuli exactly once in file " + filepath.lstrip("../data/"))
 		print("Missing: " + str(missing))
 		print("Repeated: " + str(repeated))
+		print("Stimuli value bigger than " + str(maxStimulusValue) +": " + str(beyond))
 
 def findparticipantIds(filenames):
 	# Note: This is assuming that the .vmrk files are of the format [participantId]_[day]_[month]_[year].vmrk
@@ -103,7 +106,7 @@ def main():
 			concatenatedFilePath = "../data/" + participantId + 'concatenated.vmrk'
 
 			if concatenatedFilePath not in filepaths: # concatenated file is not there; we add it and remove the others
-				concatenateSplittedFiles(participantId, paths)
+				concatenateSplittedFiles(participantId, paths, concatenatedFilePath)
 
 			filepaths = [filepath for filepath in filepaths if filepath not in paths] # remove old filepaths from the list
 			filepaths.append(concatenatedFilePath) # add the new filepath to the concatenated file
