@@ -9,8 +9,6 @@ DataFile=S8_07_2018.eeg
 ; <Size in data points>, <Channel number (0 = marker is related to all channels)>
 ; Fields are delimited by commas, some fields might be omitted (empty).
 ; Commas in type or description text are coded as "\1".
-; Note: There used to be 2 instances of the same stimulus, for the stimuli S100, S101, S102, S103 and S104
-; The second one were manually removed in each case
 Mk1=New Segment,,1,1,0,20180716101106981448
 Mk2=Stimulus,S  6,65735,1,0
 Mk3=Stimulus,S  6,79350,1,0
@@ -96,6 +94,11 @@ Mk82=Stimulus,S 31,1296142,1,0
 Mk83=Stimulus,S 33,1314031,1,0
 Mk84=Stimulus,S 30,1331929,1,0
 Mk85=Stimulus,S  3,1351477,1,0
+Mk86=Stimulus,S102,1361537,1,0
+Mk87=Stimulus,S104,1379446,1,0
+Mk88=Stimulus,S101,1397355,1,0
+Mk89=Stimulus,S103,1415243,1,0
+Mk90=Stimulus,S100,1433142,1,0
 Mk91=Stimulus,S  2,1455952,1,0
 Mk92=Stimulus,S  6,1506246,1,0
 Mk93=Stimulus,S  6,1535565,1,0
