@@ -3,9 +3,9 @@ addpath /home/viethan/fieldtrip-20211020
 clearvars
 
 filepath_data = '/home/viethan/Documents/Projects/';
-eeg_filenames = importdata([filepath_data,'eeg_filenames.txt'])
+filenames = importdata([filepath_data,'filenames.txt'])
 filepath_save = '/home/viethan/Documents/Projects/ft_output/';
-doteeg  = '.eeg';
+dotvhdr  = '.vhdr';
 
 
 sounds = {'nonsense', {'S 10', 'S 11', 'S 12', 'S 13', 'S 14', 'S 15', 'S 16', 'S 17', 'S 18', 'S 19', 'S 20', 'S 21', 'S 22', 'S 23', 'S 24', 'S 25', 'S 26', 'S 27', 'S 28', 'S 29', 'S 30', 'S 31', 'S 32', 'S 33', 'S 34', 'S 35', 'S 36', 'S 37', 'S 38', 'S 39'};
@@ -47,13 +47,13 @@ for i = 1:length(blocks)
     block = blocks(i, 2:end);
     block_name = blocks(i, 1);
     
-    for ii = 1:length(eeg_filenames)
-        eeg_filename = strcat(eeg_filenames{ii})
+    for ii = 1:length(filenames)
+        eeg_filename = strcat(filenames{ii})
         
         % defining trials
         
         cfg = [];
-        cfg.dataset = strcat(filepath_data,eeg_filename,doteeg);
+        cfg.dataset = strcat(filepath_data,eeg_filename,dotvhdr);
         cfg.trialdef.eventtype  = 'Stimulus';
         cfg.trialdef.eventvalue = block{1,1};
         cfg.trialdef.prestim    = -sentence_length*1;   % this cuts out one sentence length (ie. removes the first sentence)
