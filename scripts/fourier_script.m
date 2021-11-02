@@ -51,14 +51,14 @@ filename = strcat(filenames{1})
 file_out = strcat(filepath_data, 'output.csv');
 fd = fopen(file_out, 'w');
 
-for i = 1:length(nonsensical)
+for i = 1:length(all_stimuli)
     for j = 1:length(channels)
         % defining trials
         
         cfg = [];
         cfg.dataset = strcat(filepath_data,filename,dotvhdr);
         cfg.trialdef.eventtype  = 'Stimulus';
-        cfg.trialdef.eventvalue = nonsensical{i};
+        cfg.trialdef.eventvalue = all_stimuli{i};
         cfg.trialdef.prestim    = -sentence_length*1;   % this cuts out one sentence length (ie. removes the first sentence)
         cfg.trialdef.poststim   = sentence_length*13;
         cfg = ft_definetrial(cfg);
