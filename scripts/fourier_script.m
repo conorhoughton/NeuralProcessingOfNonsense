@@ -13,7 +13,9 @@ sounds = {'nonsense', {'S 10', 'S 11', 'S 12', 'S 13', 'S 14', 'S 15', 'S 16', '
           'nonsense_ctrl', {'S 70' 'S 71' 'S 72' 'S 73' 'S 74' 'S 75' 'S 76' 'S 77' 'S 78' 'S 79' 'S 80' 'S 81' 'S 82' 'S 83' 'S 84' 'S 85' 'S 86' 'S 87' 'S 88' 'S 89' 'S 90' 'S 91' 'S 92' 'S 93' 'S 94' 'S 95' 'S 96' 'S 97' 'S 98' 'S 99'} 
           'sense_ctrl', {'S100' 'S101' 'S102' 'S103' 'S104' 'S105' 'S106' 'S107' 'S108' 'S109' 'S110' 'S111' 'S112' 'S113' 'S114' 'S115' 'S116' 'S117' 'S118' 'S119' 'S120' 'S121' 'S122' 'S123' 'S124' 'S125' 'S126' 'S127' 'S128' 'S129'} 
           };
-           
+
+channels = {'Fp1' 'Fp2' 'F7' 'F3' 'Fz' 'F4' 'F8' 'FC5' 'FC1' 'FC2' 'FC6' 'T7' 'C3' 'Cz' 'C4' 'T8' 'TP9' 'CP5' 'CP1' 'CP2' 'CP6' 'TP10' 'P7' 'P3' 'Pz' 'P4' 'P8' 'PO9' 'O1' 'Oz' 'O2' 'PO10'}
+
 lpf = 25;
 sample_freq = 1000;
 
@@ -26,36 +28,37 @@ sentence_length = word_length*number_of_words_per_sentence;
 trial_length = word_length*number_of_words_per_sentence*number_of_sentences_per_trial;
 
 
-nonsensical = sounds(1, 2:end);
-sensical = sounds(2, 2:end);
-nonsensical_ctrl = sounds(3, 2:end);
-sensical_ctrl = sounds(4, 2:end);
-all_experiment = {[sensical{1}, nonsensical{1}]};
-all_ctrl = {[sensical_ctrl{1}, nonsensical_ctrl{1}]};
+nonsensical = sounds{1,2};
+sensical = sounds{2,2};
+nonsensical_ctrl = sounds{3,2};
+sensical_ctrl = sounds{4,2};
+all_experiment = [nonsensical sensical];
+all_ctrl = [nonsensical_ctrl sensical_ctrl];
+all_stimuli = [all_experiment all_ctrl];
 
+%{
 blocks = {'nonsensical', nonsensical{1,1};
           'sensical', sensical{1,1};
           'nonsensical_ctrl', nonsensical_ctrl{1,1};
           'sensical_ctrl', sensical_ctrl{1};
            'experiment', all_experiment{1,1};
-           'control', all_ctrl{1};
+            'control', all_ctrl{1};
          };
-            
 
-for i = 1:length(blocks)
+%}
 
-    block = blocks(i, 2:end);
-    block_name = blocks(i, 1);
-    
-    for ii = 1:length(filenames)
-        eeg_filename = strcat(filenames{ii})
-        
+filename = strcat(filenames{1})
+file_out = strcat(filepath_data, 'output.csv');
+fd = fopen(file_out, 'w');
+
+for i = 1:length(nonsensical)
+    for j = 1:length(channels)
         % defining trials
         
         cfg = [];
-        cfg.dataset = strcat(filepath_data,eeg_filename,dotvhdr);
+        cfg.dataset = strcat(filepath_data,filename,dotvhdr);
         cfg.trialdef.eventtype  = 'Stimulus';
-        cfg.trialdef.eventvalue = block{1,1};
+        cfg.trialdef.eventvalue = nonsensical{i};
         cfg.trialdef.prestim    = -sentence_length*1;   % this cuts out one sentence length (ie. removes the first sentence)
         cfg.trialdef.poststim   = sentence_length*13;
         cfg = ft_definetrial(cfg);
@@ -65,7 +68,7 @@ for i = 1:length(blocks)
         cfg.channel = 'EEG';
         cfg.demean = 'yes';
         cfg.reref='yes';
-        cfg.refchannel = 'Cz';
+        cfg.refchannel = channels{j};
         cfg.lpfilter = 'yes'; 
         cfg.lpfreq = lpf;
         data = ft_preprocessing(cfg)
@@ -78,10 +81,16 @@ for i = 1:length(blocks)
         cfg.taper = 'hanning';
         cfg.output = 'fourier';
         freq = ft_freqanalysis(cfg, data)
+        
+        disp(strcat(all_stimuli{i}, ',', channels{j}));
+        writematrix(freq.fourierspctrm, file_out,'WriteMode','append')
 
     end
-
 end
 
+fclose(fd);
+
+
+        
 
 
