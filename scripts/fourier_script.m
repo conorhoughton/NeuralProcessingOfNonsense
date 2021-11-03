@@ -3,7 +3,7 @@ addpath /home/viethan/fieldtrip-20211020
 clearvars
 
 filepath_data = '/home/viethan/Documents/Projects/NeuralProcessingOfNonsense/data/eeg_data/';
-filenames = importdata([filepath_data,'filenames.txt'])
+filenames = importdata([filepath_data,'filenames.txt']);
 filepath_save = '/home/viethan/Documents/Projects/NeuralProcessingOfNonsense/data/csv_files/';
 
 sounds = {'nonsense', {'S 10', 'S 11', 'S 12', 'S 13', 'S 14', 'S 15', 'S 16', 'S 17', 'S 18', 'S 19', 'S 20', 'S 21', 'S 22', 'S 23', 'S 24', 'S 25', 'S 26', 'S 27', 'S 28', 'S 29', 'S 30', 'S 31', 'S 32', 'S 33', 'S 34', 'S 35', 'S 36', 'S 37', 'S 38', 'S 39'};
@@ -35,8 +35,8 @@ all_stimuli = [all_experiment all_ctrl];
 for x = 1:length(filenames)
 
     filename = strcat(filenames{x});
-    file_out = strcat(filepath_save, strcat(filename, '_main.csv'));
-    file_coeff = strcat(filepath_save, strcat(filename, '_ft_coeff.csv'));
+    file_out = strcat(filepath_save, filename, '_main.csv');
+    file_coeff = strcat(filepath_save, filename, '_ft_coeff.csv');
 
     fd_out = fopen(file_out, 'w');
     fd_coeff = fopen(file_coeff, 'w');
