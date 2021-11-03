@@ -58,7 +58,7 @@ col_participant_name = cellstr(repelem([filename], 960, 1))
 col_trial_number = []
 col_electrode_number = []
 
-for i = 1:length(nonsensical)
+for i = 1:length(all_stimuli)
     temp = cellstr(repelem([int2str(i)], 32, 1))
     col_trial_number = [col_trial_number; temp]
 
@@ -71,7 +71,7 @@ for i = 1:length(nonsensical)
         cfg = [];
         cfg.dataset = strcat(filepath_data,filename,dotvhdr);
         cfg.trialdef.eventtype  = 'Stimulus';
-        cfg.trialdef.eventvalue = nonsensical{i};
+        cfg.trialdef.eventvalue = all_stimuli{i};
         cfg.trialdef.prestim    = -sentence_length*1;   % this cuts out one sentence length (ie. removes the first sentence)
         cfg.trialdef.poststim   = sentence_length*13;
         cfg = ft_definetrial(cfg);
@@ -95,7 +95,7 @@ for i = 1:length(nonsensical)
         cfg.output = 'fourier';
         freq = ft_freqanalysis(cfg, data)
         
-        disp(strcat(nonsensical{i}, ',', channels{j}));
+        disp(strcat(all_stimuli{i}, ',', channels{j}));
         writematrix(freq.fourierspctrm, file_coeff,'WriteMode','append')
     end
 end
