@@ -47,18 +47,31 @@ blocks = {'nonsensical', nonsensical{1,1};
 
 %}
 
-filename = strcat(filenames{1})
+filename = strcat(filenames{1});
 file_out = strcat(filepath_data, 'output.csv');
-fd = fopen(file_out, 'w');
+file_coeff = strcat(filepath_data, 'coeff.csv');
+fd_out = fopen(file_out, 'w');
+fd_coeff = fopen(file_coeff, 'w');
 
-for i = 1:length(all_stimuli)
+fourier_coeff = []
+col_participant_name = cellstr(repelem([filename], 960, 1))
+col_trial_number = []
+col_electrode_number = []
+
+for i = 1:length(nonsensical)
+    temp = cellstr(repelem([int2str(i)], 32, 1))
+    col_trial_number = [col_trial_number; temp]
+
+    temp = rot90(arrayfun(@num2str,1:32,'Uni',0), 3)
+    col_electrode_number = [col_electrode_number; temp]
+
     for j = 1:length(channels)
         % defining trials
         
         cfg = [];
         cfg.dataset = strcat(filepath_data,filename,dotvhdr);
         cfg.trialdef.eventtype  = 'Stimulus';
-        cfg.trialdef.eventvalue = all_stimuli{i};
+        cfg.trialdef.eventvalue = nonsensical{i};
         cfg.trialdef.prestim    = -sentence_length*1;   % this cuts out one sentence length (ie. removes the first sentence)
         cfg.trialdef.poststim   = sentence_length*13;
         cfg = ft_definetrial(cfg);
@@ -82,13 +95,22 @@ for i = 1:length(all_stimuli)
         cfg.output = 'fourier';
         freq = ft_freqanalysis(cfg, data)
         
-        disp(strcat(all_stimuli{i}, ',', channels{j}));
-        writematrix(freq.fourierspctrm, file_out,'WriteMode','append')
-
+        disp(strcat(nonsensical{i}, ',', channels{j}));
+        writematrix(freq.fourierspctrm, file_coeff,'WriteMode','append')
     end
 end
 
-fclose(fd);
+fclose(fd_coeff);
+
+cols_fourier_coeff = readcell(file_coeff)
+
+output = [col_participant_name col_trial_number col_electrode_number cols_fourier_coeff]
+writecell(output, file_out);
+
+fclose(fd_out);
+
+
+
 
 
         
